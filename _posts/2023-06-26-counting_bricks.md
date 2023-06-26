@@ -33,7 +33,7 @@ FA_filename = 'original_image.jpg'
 FA_color = imread(FA_filename)
 ```
 
-<img src="C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-23-counting_bricks\original_image.jpg" alt="original_image" style="zoom:50%;" />
+<img src="C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-26-counting_bricks\original_image.jpg" alt="original_image" style="zoom:50%;" />
 
 # Gray Scale
 
@@ -44,7 +44,7 @@ skimage.io의 rgb2gray를 사용해 RGB 채널을 Gray scale로 변환하였습�
 FA_gray = rgb2gray(FA_color)
 ```
 
-<img src="C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-23-counting_bricks\gray_image.jpg" alt="gray_image" style="zoom:50%;" />
+<img src="C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-26-counting_bricks\gray_image.jpg" alt="gray_image" style="zoom:50%;" />
 
 # Gaussian Kernel
 
@@ -83,7 +83,7 @@ kernel = gaussian_kernel(5)
 FA_blur = ndi.convolve(FA_gray, kernel)
 ```
 
-<img src="C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-23-counting_bricks\gaussian_kernel.jpg" alt="gaussian_kernel" style="zoom:50%;" />
+<img src="C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-26-counting_bricks\gaussian_kernel.jpg" alt="gaussian_kernel" style="zoom:50%;" />
 
 # Sobel filter
 
@@ -110,7 +110,7 @@ def sobel_filters(img):
 FA_intensity, D = sobel_filters(FA_blur)
 ```
 
-<img src="C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-23-counting_bricks\sobel_filter.jpg" alt="sobel_filter" style="zoom:50%;" />
+<img src="C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-26-counting_bricks\sobel_filter.jpg" alt="sobel_filter" style="zoom:50%;" />
 
 # Non Maximum Suppression
 
@@ -158,7 +158,7 @@ def non_max_suppression(img, D):
 FA_nms = non_max_suppression(FA_intensity, D)
 ```
 
-<img src="C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-23-counting_bricks\nms.jpg" alt="nms" style="zoom:50%;" />
+<img src="C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-26-counting_bricks\nms.jpg" alt="nms" style="zoom:50%;" />
 
 # 층의 갯수 구하기
 
@@ -169,7 +169,7 @@ temp = FA_nms[:, 600]
 X = np.arange(len(temp))
 ```
 
-<img src="C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-23-counting_bricks\temp.png" alt="temp" style="zoom:50%;" />
+<img src="C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-26-counting_bricks\temp.png" alt="temp" style="zoom:50%;" />
 
 
 ```python
@@ -205,7 +205,7 @@ print('''Number of bricks' layers:''', len(peaks))
 
 112 개의 로컬 맥시멈 값을 구했습니다. (112 개의 벽돌 층을 의미)
 
-<img src="C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-23-counting_bricks\interpolated.png" alt="interpolated" style="zoom:50%;" />
+<img src="C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-26-counting_bricks\interpolated.png" alt="interpolated" style="zoom:50%;" />
 
 
 ```python
@@ -226,6 +226,5 @@ cv2.line(result, (600, y_start), (600, y_end), (255, 0, 0), 2)
 
 빨간 세로 선은 임의로 그은 선입니다.
 
+<img src="C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-26-counting_bricks\result.jpg" alt="result" style="zoom:50%;" />
 
-
-<img src="C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-23-counting_bricks\result.jpg" alt="result" style="zoom:50%;" />
