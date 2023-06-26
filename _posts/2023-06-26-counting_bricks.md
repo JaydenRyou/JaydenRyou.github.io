@@ -41,7 +41,7 @@ FA_filename = 'original_image.jpg'
 FA_color = imread(FA_filename)
 ```
 
-![original_image](C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-26-counting_bricks\original_image-1687771740681-10.jpg)
+![original_image]({{site.url}}\images\2023-06-26-counting_bricks\original_image.jpg)
 
 # Gray Scale
 
@@ -52,7 +52,7 @@ skimage.io의 rgb2gray를 사용해 RGB 채널을 Gray scale로 변환하였습�
 FA_gray = rgb2gray(FA_color)
 ```
 
-
+![gray_image]({{site.url}}\images\2023-06-26-counting_bricks\gray_image.jpg)
 
 # Gaussian Kernel
 
@@ -91,7 +91,7 @@ kernel = gaussian_kernel(5)
 FA_blur = ndi.convolve(FA_gray, kernel)
 ```
 
-
+![gaussian_kernel]({{site.url}}\images\2023-06-26-counting_bricks\gaussian_kernel.jpg)
 
 # Sobel filter
 
@@ -118,7 +118,7 @@ def sobel_filters(img):
 FA_intensity, D = sobel_filters(FA_blur)
 ```
 
-
+![sobel_filter]({{site.url}}\images\2023-06-26-counting_bricks\sobel_filter.jpg)
 
 # Non Maximum Suppression
 
@@ -166,7 +166,7 @@ def non_max_suppression(img, D):
 FA_nms = non_max_suppression(FA_intensity, D)
 ```
 
-
+![nms]({{site.url}}\images\2023-06-26-counting_bricks\nms.jpg)
 
 # 층의 갯수 구하기
 
@@ -177,7 +177,7 @@ temp = FA_nms[:, 600]
 X = np.arange(len(temp))
 ```
 
-
+![temp]({{site.url}}\images\2023-06-26-counting_bricks\temp.png)
 
 
 ```python
@@ -213,7 +213,7 @@ print('''Number of bricks' layers:''', len(peaks))
 
 112 개의 로컬 맥시멈 값을 구했습니다. (112 개의 벽돌 층을 의미)
 
-
+![interpolated]({{site.url}}\images\2023-06-26-counting_bricks\interpolated.png)
 
 
 ```python
@@ -234,5 +234,5 @@ cv2.line(result, (600, y_start), (600, y_end), (255, 0, 0), 2)
 
 빨간 세로 선은 임의로 그은 선입니다.
 
-
+![result]({{site.url}}\images\2023-06-26-counting_bricks\result.jpg)
 
