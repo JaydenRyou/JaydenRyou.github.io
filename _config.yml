@@ -105,7 +105,7 @@ analytics:
 # Site Author
 author:
   name             : "유효열"
-  avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  avatar           :  "/assets/images/MOOMIN.jpg"
   bio              : "스스로 동기부여하여 발전을 도모하며, 도전에 적극적인 데이터 분석가/사이언티스트를 꿈꾸고 있습니다."
   location         : "South Korea"
   email            : "hyoyeol6349@gmail.com"
@@ -265,3 +265,6 @@ defaults:
       share: true
       related: true
       show_date: true
+      toc: true
+      toc_sticky: true
+      toc_label: Contents
