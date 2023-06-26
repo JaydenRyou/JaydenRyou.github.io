@@ -25,7 +25,7 @@ from skimage.color import rgb2gray
 
 # 학교 강당 건물 사진 불러오기
 
-
+University of Illinois Urbana-Champaign의 Foellinger Auditorium의 건물 사진를 촬영하고 로드하였습니다.
 
 
 ```python
@@ -33,22 +33,22 @@ FA_filename = 'original_image.jpg'
 FA_color = imread(FA_filename)
 ```
 
-<img src="C:\Users\hyoye\Desktop\2023-06-26-archive-1\original_image.jpg" style="zoom: 50%;" />
+<img src="C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-23-counting_bricks\original_image.jpg" alt="original_image" style="zoom:50%;" />
 
-# RGB 채널을 Gray 채널로 변환
+# Gray Scale
 
-
+skimage.io의 rgb2gray를 사용해 RGB 채널을 Gray scale로 변환하였습니다.
 
 
 ```python
 FA_gray = rgb2gray(FA_color)
 ```
 
-<img src="C:\Users\hyoye\Desktop\2023-06-26-archive-1\gray_image.jpg" style="zoom:50%;" />
+<img src="C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-23-counting_bricks\gray_image.jpg" alt="gray_image" style="zoom:50%;" />
 
-# Gaussian Kernel를 사용해 이미지 노이즈 제거
+# Gaussian Kernel
 
-
+5 x 5 Gaussian Kernel 만든 후 Gray scale 된 이미지와 convolutional operation을 통해 이미지 노이즈 제거하였습니다.
 
 
 ```python
@@ -83,11 +83,11 @@ kernel = gaussian_kernel(5)
 FA_blur = ndi.convolve(FA_gray, kernel)
 ```
 
-<img src="C:\Users\hyoye\Desktop\2023-06-26-archive-1\gaussian_kernel.jpg" style="zoom:50%;" />
+<img src="C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-23-counting_bricks\gaussian_kernel.jpg" alt="gaussian_kernel" style="zoom:50%;" />
 
-# Sobel fiter를 사용해 가로, 세로 엣지 부분 값 극대화
+# Sobel filter
 
-
+Sobel filter를 사용해 가로, 세로 축 방향의 엣지 값을 극대화하였습니다.
 
 
 ```python
@@ -110,11 +110,11 @@ def sobel_filters(img):
 FA_intensity, D = sobel_filters(FA_blur)
 ```
 
-<img src="C:\Users\hyoye\Desktop\2023-06-26-archive-1\sobel_filter.jpg" style="zoom:50%;" />
+<img src="C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-23-counting_bricks\sobel_filter.jpg" alt="sobel_filter" style="zoom:50%;" />
 
-# NMS를 사용해 엣지를 얇게 만들기
+# Non Maximum Suppression
 
-
+NMS를 사용해 엣지 부분을 얇게 만들었습니다.
 
 
 ```python
@@ -158,22 +158,18 @@ def non_max_suppression(img, D):
 FA_nms = non_max_suppression(FA_intensity, D)
 ```
 
-<img src="C:\Users\hyoye\Desktop\2023-06-26-archive-1\nms.jpg" style="zoom:50%;" />
+<img src="C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-23-counting_bricks\nms.jpg" alt="nms" style="zoom:50%;" />
 
 # 층의 갯수 구하기
 
-전처리 된 이미지에 세로 선분을 그어 데이터 값에 보간법을 적용하였습니다.
-
-find\_peak 함수를 이용해 로컬 멕시멈 갯수를 구했습니다.
-
-해당 값을 원본 이미지에 가로 선을 그려서 결과를 확인하였습니다.
+임의의 세로 선분 그어 값을 구했습니다.
 
 ```python
 temp = FA_nms[:, 600]
 X = np.arange(len(temp))
 ```
 
-<img src="C:\Users\hyoye\Desktop\2023-06-26-archive-1\temp.png" style="zoom:50%;" />
+<img src="C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-23-counting_bricks\temp.png" alt="temp" style="zoom:50%;" />
 
 
 ```python
@@ -201,7 +197,15 @@ print('''Number of bricks' layers:''', len(peaks))
 
     Number of bricks' layers: 112  
 
-<img src="C:\Users\hyoye\Desktop\2023-06-26-archive-1\interpolated.png" style="zoom:50%;" />
+원본 값(파란색 점)에 보간 법을 적용한 것은 빨간색 선입니다. 
+
+그 후 Gaussian 1d filter를 적용해 초록색 선을 구했습니다.
+
+그 후 find_peaks 함수를 사용해 로컬 맥시멈 값을 (파란색 X) 구했습니다. 
+
+112 개의 로컬 맥시멈 값을 구했습니다. (112 개의 벽돌 층을 의미)
+
+<img src="C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-23-counting_bricks\interpolated.png" alt="interpolated" style="zoom:50%;" />
 
 
 ```python
@@ -218,4 +222,10 @@ for peak in peaks:
 cv2.line(result, (600, y_start), (600, y_end), (255, 0, 0), 2)
 ```
 
-<img src="C:\Users\hyoye\Desktop\2023-06-26-archive-1\result.jpg" style="zoom:50%;" />
+앞서 구한 로컬 맥시멈 값을 원본 이미지에 초록색 가로선을 그었습니다.
+
+빨간 세로 선은 임의로 그은 선입니다.
+
+
+
+<img src="C:\jaydenryou-github-blog\JaydenRyou.github.io\images\2023-06-23-counting_bricks\result.jpg" alt="result" style="zoom:50%;" />
