@@ -1,3 +1,11 @@
+---
+layout: single
+title: "Counting bricks in image of building"
+categories: Project
+tag: [python, Canny Edge detection]
+toc: true
+---
+
 학교 건물들이 벽돌로 지어져 있어, 벽돌의 층 수를 구해 건물의 높이를 예측하는 프로젝트입니다.
 
 실제 학교 건물들의 사진을 사용하였습니다. Canny Edge Detection 알고리즘을 활용해 이미지 전처리를 진행하였습니다.
