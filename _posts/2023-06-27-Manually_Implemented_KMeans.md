@@ -1,3 +1,12 @@
+---
+layout: single
+title: "Manually Implemented K-Means"
+categories: Project
+tag: [python, Sklearn, K-Means]
+author_profile: false
+---
+
+
 # 프로젝트 개요
 
 프로젝트의 목표는 KMeans 알고리즘을 수동으로 구현하고 Sklearn 라이브러리의 KMeans 모델과 비교하는 것입니다.
@@ -54,7 +63,7 @@ train_df.info()
      10  Segmentation     8068 non-null   object 
     dtypes: float64(2), int64(2), object(7)
     memory usage: 693.5+ KB
-    
+
 
 
 ```python
@@ -105,7 +114,7 @@ combined_df.isna().sum()
 ```
 
     (10695, 9)
-    
+
 
 
 
@@ -139,7 +148,7 @@ print('categorical_col: ', categorical_columns)
 
     numerical_col:  ['Age', 'Work_Experience', 'Family_Size']
     categorical_col:  ['Gender', 'Ever_Married', 'Graduated', 'Profession', 'Spending_Score', 'Var_1']
-    
+
 
 
 ```python
@@ -156,8 +165,8 @@ plt.show()
 ```
 
 
-    
-![png](output_15_0.png)
+
+![output_15_0]({{site.url}}\images\2023-06-27-Manually_Implemented_KMeans\output_15_0.png)
     
 
 
@@ -173,8 +182,7 @@ plt.show()
 ```
 
 
-    
-![png](output_16_0.png)
+ ![output_16_0]({{site.url}}\images\2023-06-27-Manually_Implemented_KMeans\output_16_0.png)
     
 
 
@@ -232,7 +240,7 @@ pd.DataFrame(X_transformed)
     .dataframe tbody tr th {
         vertical-align: top;
     }
-
+    
     .dataframe thead th {
         text-align: right;
     }
@@ -543,7 +551,7 @@ X_transformed
     .dataframe tbody tr th {
         vertical-align: top;
     }
-
+    
     .dataframe thead th {
         text-align: right;
     }
@@ -918,7 +926,7 @@ pd.DataFrame(updated_centroids)
     .dataframe tbody tr th {
         vertical-align: top;
     }
-
+    
     .dataframe thead th {
         text-align: right;
     }
@@ -1068,7 +1076,7 @@ y_km = km.fit_predict(X_transformed.iloc[:,:-1].values)
       warnings.warn(
     C:\Users\hyoye\anaconda3\lib\site-packages\sklearn\cluster\_kmeans.py:1362: RuntimeWarning: Explicit initial center position passed: performing only one init in KMeans instead of n_init=10.
       super()._check_params_vs_input(X, default_n_init=10)
-    
+
 
 Sklearn KMeans 중심점입니다.
 
@@ -1089,7 +1097,7 @@ pd.DataFrame(km.cluster_centers_)
     .dataframe tbody tr th {
         vertical-align: top;
     }
-
+    
     .dataframe thead th {
         text-align: right;
     }
@@ -1223,7 +1231,7 @@ pd.DataFrame(km.cluster_centers_)
 
 수동 구현한 KMeans와 Sklearn의 KMeans의 중심점 거리는 0.47로 데이터셋에 20개의 컬럼이 있는데도 좋은 성능을 보여줬습니다. 또한 초기 중심점과의 거리는 148.43으로 알고리즘이 잘 작동되었다고 생각됩니다. 
 
-그러나 Sklearn의 KMeans는 바로 실행되었지만 저의 수동 알고리즘 수행 시간은 약 3분 정도 걸렸습니다. 찾아보니 Sklearn의 KMeans 알고리즘은 Lloyd's algorithm을 C언어로 구현하여 속도가 빨르다고 합니다.
+그러나 Sklearn의 KMeans는 바로 실행되었지만 저의 수동 알고리즘 수행 시간은 약 3분 정도 걸렸습니다. 찾아보니 Sklearn의 KMeans 알고리즘은 Lloyd's algorithm을 C언어로 구현하여 속도가 빠르다고 합니다.
 
 **수동으로 구현한 KMeans 중심점과 Sklearn KMeans 중심점의 euclidean distance**
 
@@ -1250,5 +1258,4 @@ euclidean_distance(init_centroids.iloc[:,:-1].values, km.cluster_centers_)
 
 
     148.42659292257596
-
 
