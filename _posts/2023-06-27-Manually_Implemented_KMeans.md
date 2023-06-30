@@ -36,8 +36,8 @@ np.random.seed(317)
 
 
 ```python
-train_df = pd.read_csv(...\Classifying Customers into Segments\Train.csv')
-test_df = pd.read_csv(...\Classifying Customers into Segments\Test.csv')
+train_df = pd.read_csv('...\Classifying Customers into Segments\Train.csv')
+test_df = pd.read_csv('...\Classifying Customers into Segments\Test.csv')
 ```
 
 
