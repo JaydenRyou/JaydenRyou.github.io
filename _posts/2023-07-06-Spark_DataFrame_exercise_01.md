@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "SPARK DataFrame (1)"
-categories: Study Notes
+categories: [Study Notes]
 tag: [SPARK]
 author_profile: false
 ---
