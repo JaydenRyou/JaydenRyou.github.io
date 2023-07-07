@@ -1,7 +1,15 @@
+---
+layout: single
+title: "Pandas DataFrame vs Spark DataFrame (1)"
+categories: [Study Notes]
+tag: [Spark, SQL]
+author_profile: false
+---
+
 ### titanic_train.csv 파일을 로드하고, 이를 DataFrame으로 변환
 
 
-```
+```python
 # spark.read.csv() 메소드를 이용하여 csv 파일을 로드하고 DataFrame으로 변환
 titanic_sdf = spark.read.csv('/FileStore/tables/titanic_train.csv', header=True, inferSchema=True)
 
@@ -39,7 +47,7 @@ titanic_sdf.show()
     
 
 
-```
+```python
 import pandas as pd
 
 # pandas DataFrame을 spark DataFrame으로 부터 생성
@@ -265,7 +273,7 @@ titanic_pdf
 **Pandas DataFrame의 head(N) 적용시 Pandas DataFrame 반환**
 
 
-```
+```python
 # pandas DataFrame.head()
 print(type(titanic_pdf.head(5)))
 titanic_pdf.head(5)
@@ -394,7 +402,7 @@ titanic_pdf.head(5)
 **Spark DataFrame에 head(N) 적용시 Row object를 가지는 list 반환**
 
 
-```
+```python
 # Spark DataFrame.head()
 print(type(titanic_sdf.head(5)))
 titanic_sdf.head(5)
@@ -417,7 +425,7 @@ titanic_sdf.head(5)
 **Spark DataFrame의 limit(N)가 DataFrame의 선두 N개 Record를 가지는 DataFrame을 반환**
 
 
-```
+```python
 print(type(titanic_sdf.limit(5)))
 titanic_sdf.limit(5).show()
 ```
@@ -440,7 +448,7 @@ titanic_sdf.limit(5).show()
 **Pandas DataFrame에 print() 적용시 DataFrame 내용 출력**
 
 
-```
+```python
 print(titanic_pdf.head(10))
 ```
 
@@ -462,7 +470,7 @@ print(titanic_pdf.head(10))
 **Spark DataFrame에 print() 적용시 DataFrame의 schema 출력**
 
 
-```
+```python
 print(titanic_sdf.limit(10))
 ```
 
@@ -474,7 +482,7 @@ print(titanic_sdf.limit(10))
 **Pandas DataFrame에 info() 적용시 컬렴명, not null 건수, data type 출력**
 
 
-```
+```python
 titanic_pdf.info()
 ```
 
@@ -502,7 +510,7 @@ titanic_pdf.info()
 **Spark DataFrame에 printSchema() 적용시 (컬럼명, data type) schema 출력**
 
 
-```
+```python
 titanic_sdf.printSchema()
 ```
 
@@ -525,7 +533,7 @@ titanic_sdf.printSchema()
 **not null 건수를 위해 별도 SQL 쿼리 작성 필요**
 
 
-```
+```python
 from pyspark.sql.functions import count, col, when, isnan
 
 titanic_sdf.select([count(when(col(c).isNull() | isnan(c), c)).alias(c) for c in titanic_sdf.columns]).show()
@@ -544,7 +552,7 @@ titanic_sdf.select([count(when(col(c).isNull() | isnan(c), c)).alias(c) for c in
 **Pandas DataFrame에 describe() 적용시 숫자형 컬럼에 대해 count/mean/std/min/percentile/max 값 출력**
 
 
-```
+```python
 titanic_pdf.describe()
 ```
 
@@ -668,7 +676,7 @@ titanic_pdf.describe()
 **Spark DataFrame에 describe() 적용시 숫자형 컬럼 뿐만 아니라 문자형 컬럼에 대해서도 count/mean/std/min/max 값 출력 (percentile 값 출력 X)**
 
 
-```
+```python
 titanic_sdf.describe().show()
 ```
 
@@ -685,7 +693,7 @@ titanic_sdf.describe().show()
     
 
 
-```
+```python
 # 숫자형 컬럼에 대해서 describe() 수행할 수 있도록 select 컬럼, filtering 적용
 
 num_columns = [column for column, dtype in titanic_sdf.dtypes if dtype != 'string']
@@ -709,7 +717,7 @@ titanic_sdf.select(num_columns).describe().show()
 **Pandas DataFrame은 shape을 통해 row 건수와 column 개수 반환 (Spark DataFrame은 shape 제공 X)**
 
 
-```
+```python
 # spark DataFrame row 건수
 print('row 건수: ', titanic_sdf.count())
 # spark DataFrame column 개수
@@ -728,7 +736,7 @@ print('column 개수: ', len(titanic_sdf.columns))
 * select 절에 list를 입력해도 되나, 원칙적으로 개별 컬럼을 넣는 것이 바람직
 
 
-```
+```python
 dict_01 = {'Name': ['Chulmin', 'Wansoo','Myunghyun','Hyunjoo', 'Chulman'],
            'Year': [2011, 2016, 2015, 2015, 2011],
            'Gender': ['Male', 'Male', 'Male', 'Female', 'Male']
@@ -743,7 +751,7 @@ data_sdf = spark.createDataFrame(data_pdf)
 **Pandas DataFrame의 단일 컬럼 출력**
 
 
-```
+```python
 data_pdf['Name']
 ```
 
@@ -762,7 +770,7 @@ data_pdf['Name']
 **Pandas DataFrame의 여러 컬럼 출력**
 
 
-```
+```python
 data_pdf[['Name', 'Year']]
 ```
 
@@ -826,7 +834,7 @@ data_pdf[['Name', 'Year']]
 **Spark DataFrame의 단일 컬럼 출력**
 
 
-```
+```python
 from pyspark.sql.functions import col
 
 # data_sdf.select('Name') = data_sdf.select(data_sdf.Name) = data_sdf.select(col('Name')) = data_sdf.select(data_sdf['Name'])
@@ -848,7 +856,7 @@ data_sdf.select(col('Name')).show() # SELECT Name FROM data_sdf
 **Spark DataFrame의 여러 컬럼 출력**
 
 
-```
+```python
 from pyspark.sql.functions import col
 
 # data_sdf.select('Name', 'Year') = data_sdf.select(['Name','Year']) = data_sdf.select(data_sdf['Name'], data_sdf['Year'])
@@ -871,7 +879,7 @@ data_sdf.select(col('Name'), col('Year')).show() # SELECT Name, Year FROM data_s
 **select() 절에서 컬럼 가공 후 DataFrame 생성**
 
 
-```
+```python
 from pyspark.sql.functions import lower, upper, col
 
 data_sdf.select('*', upper(col('Name'))).show()
@@ -907,7 +915,7 @@ data_sdf.select(upper(col('Name'))).show()
 * 복합 조건 and는 & 를, or를 | 를 사용. 개별 조건은 ()로 감싸야 함.
 
 
-```
+```python
 # data_sdf.where(data_sdf['Name'] == 'Chulmin)
 # data_sdf.filter("Name == 'Chulmin'")
 data_sdf.filter(data_sdf['Name'] == 'Chulmin').show() # SELECT * FROM data_sdf WHERE Name = 'Chulmin'
@@ -922,7 +930,7 @@ data_sdf.filter(data_sdf['Name'] == 'Chulmin').show() # SELECT * FROM data_sdf W
     
 
 
-```
+```python
 from pyspark.sql.functions import col
 
 data_sdf.filter( (data_sdf['Gender'] == 'Male') & (col('Year') > 2011) ).show() # SELECT * FROM data_sdf WHERE GENDER = 'Male' AND Year > 2011
@@ -950,7 +958,7 @@ data_sdf.filter( (data_sdf['Gender'] == 'Male') | (col('Year') < 2011) ).show() 
 **문자열 컬럼의 like 수행**
 
 
-```
+```python
 data_sdf.filter(col('Name').like('Chul%')).show() # SELECT * FROM data_sdf WHERE Name LIKE 'Chul%'
 
 # SQL의 like 조건문을 string으로 filter() 수행
@@ -974,7 +982,7 @@ data_sdf.filter("Name like 'Chul%'").show()
     
 
 
-```
+```python
 # filtering 후에 특정 컬럼으로만 DataFrame 생성하려면 select() 적용. 
 data_sdf.filter(upper(data_sdf['Name']).like('%M%')).select('Year', 'Gender').show()
 ```
