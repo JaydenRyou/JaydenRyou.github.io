@@ -481,13 +481,7 @@ titanic_sdf.groupBy('Pclass').max(col('Age')).show()
     |     3|    74.0|
     |     2|    70.0|
     +------+--------+
-    
-    
 
-
-    [0;31m---------------------------------------------------------------------------[0m
-    [0;31mTypeError[0m                                 Traceback (most recent call last) 
-    [0;31mTypeError[0m: Column is not iterable
 
 
 
