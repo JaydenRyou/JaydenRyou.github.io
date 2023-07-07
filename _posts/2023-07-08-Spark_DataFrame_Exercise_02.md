@@ -1,3 +1,11 @@
+---
+layout: single
+title: "Pandas DataFrame vs Spark DataFrame (2)"
+categories: [Study Notes]
+tag: [Spark, SQL]
+author_profile: false
+---
+
 ### titanic_train.csv 파일을 로드하고, 이를 DataFrame으로 변환
 
 
@@ -11,7 +19,7 @@ titanic_pdf = titanic_sdf.select('*').toPandas()
 **Pandas DataFrame의 sort_values()**
 
 
-```
+```python
 # 단일 컬럼 오름차순 정렬
 titanic_pdf_sorted_01 = titanic_pdf.sort_values(by=['Name'], ascending=True)
 
@@ -86,7 +94,7 @@ display(titanic_pdf_sorted_03)
 **Spark DataFrame의 orderBy()**
 
 
-```
+```python
 from pyspark.sql.functions import col
 
 # orderBy에 컬럼명을 문자열로 지정
@@ -212,7 +220,7 @@ titanic_sdf.orderBy(col('Name'), ascending = False).show()
 **여러 컬럼 지정하고 서로 다른 방식으로 정렬**
 
 
-```
+```python
 # 1) .asc(), desc() 적용
 titanic_sdf.orderBy(col('Name').asc(), col('Pclass').desc()).show()
 
@@ -277,7 +285,7 @@ titanic_sdf.orderBy('Name', 'Pclass', ascending = [True, False]).show()
 **orderBy() 메소드와 동일한 sort() 제공**
 
 
-```
+```python
 titanic_sdf.sort(col('Pclass').asc(), col('Name').desc()).show()
 ```
 
@@ -314,7 +322,7 @@ titanic_sdf.sort(col('Pclass').asc(), col('Name').desc()).show()
 **Pandas DataFrame에 aggregation 적용시 DataFrame에 속한 전체 컬럼 모두 aggregation 적용**
 
 
-```
+```python
 # 1) count()
 print(titanic_pdf.count())
 print('----------------------------------------')
@@ -375,7 +383,7 @@ print(titanic_pdf.min())
 **Spark DataFrame에 aggregation 함수 적용시 count() 외 어떤 컬럼을 aggregation 할지 명시해줘야 함**
 
 
-```
+```python
 from pyspark.sql.functions import max, count, sum
 
 titanic_sdf_max = titanic_sdf.select(max('Age'))
@@ -392,12 +400,12 @@ print(type(titanic_sdf_max)) # 값은 하나지만 DataFrame 반환
     <class 'pyspark.sql.dataframe.DataFrame'>
     
 
-###Spark DataFrame의 groupBy()
+### Spark DataFrame의 groupBy()
 
 **Pandas DataFrame의 groupby(by = '컬럼명') 적용시 DataFrameGroupBy 객체를 반환하고 여기에 aggregation 메소드 적용**
 
 
-```
+```python
 # pandas DataFrame에 groupby()메소드 호출 시 DataFrameGroupBy 객체 반환. 
 titanic_pdf_groupby = titanic_pdf.groupby(by = 'Pclass')
 print('Pandas groupby type: ', type(titanic_pdf_groupby))
@@ -455,7 +463,7 @@ print(titanic_pdf_groupby.agg(agg_format))
     
 
 
-```
+```python
 # pandas DataFrame의 value_counts()는 Series에 적용시 해당 series내의 값 별로 건수를 구함. 
 print(titanic_pdf['Pclass'].value_counts())
 ```
@@ -469,7 +477,7 @@ print(titanic_pdf['Pclass'].value_counts())
 **Spark DataFrame도 groupBy('컬럼명') 수행 시 group_by_컬럼명 레벨로 group by 된 GroupedData 객체 반환하고 여기에 aggregation 메소드 적용**
 
 
-```
+```python
 titanic_sdf.groupBy('Pclass').count().show()
 print('Spark DataFrame groupBy type:', type(titanic_sdf.groupBy('Pclass')))
 ```
@@ -486,7 +494,7 @@ print('Spark DataFrame groupBy type:', type(titanic_sdf.groupBy('Pclass')))
     
 
 
-```
+```python
 # Spark DataFrame의 orderBy()메소드를 적용하여 group by 결과 건수 descending 으로 정렬 
 titanic_sdf.groupBy('Pclass').count().orderBy('count', ascending = False).show()
 ```
@@ -504,7 +512,7 @@ titanic_sdf.groupBy('Pclass').count().orderBy('count', ascending = False).show()
 **GroupedData 에 count()가 아니고 다른 aggregation 메소드를 적용 시 Pandas DataFrame의 groupby와 유사하게 group by된 컬럼 레벨로 전체 컬럼에 대해서 aggregation을 적용**
 
 
-```
+```python
 titanic_sdf.groupBy('Pclass').max().show()
 ```
 
@@ -519,7 +527,7 @@ titanic_sdf.groupBy('Pclass').max().show()
     
 
 
-```
+```python
 # group by 레벨로 특정 컬럼에 aggregation 적용. max('컬럼명')과 같이 aggregation 메소드 내부에 인자로 컬러명 입력
 titanic_sdf.groupBy('Pclass').max('Age').show() # select max(Age) from titainic_sdf group by Pclass
 
@@ -632,7 +640,7 @@ titanic_sdf.groupBy('Pclass').max(col('Age')).show()
 
 
 
-```
+```python
 # 여러 컬럼으로 Group by 규정할 때 개별 컬럼명을 입력하거나, list 형태로 입력 가능. 
 titanic_sdf.groupBy('Pclass', 'Sex').max('Age').show() # select max(Age) from titanic_sdf group by Pclass, Sex
 titanic_sdf.groupBy(['Pclass', 'Sex']).max('Age').show()
@@ -663,7 +671,7 @@ titanic_sdf.groupBy(['Pclass', 'Sex']).max('Age').show()
     
 
 
-```
+```python
 ### 여러개의 aggregation 함수를 적용할 경우는 agg()메소드 내에서 개별 aggregation 함수를 명시 해야함. 
 
 from pyspark.sql.functions import max, avg, sum, min
@@ -683,7 +691,7 @@ titanic_sdf.groupBy('Pclass').agg(max('Age'), min('Age'), sum('Age'), avg('Age')
     
 
 
-```
+```python
 #아래와 같이 개별 aggregation 함수 결과 컬럼에 별도의 컬럼명을 alias('새로운 컬럼명')을 활용하여 부여 할 수 있음. 
 # agg() 메소드 내에서 aggregation 함수 적용 시에는 col('컬럼명')과 같은 컬럼형으로 컬럼명을 지정해도 됨. 
 # select max(age) as max_age, min(age) as min_age, sum(age) as sum_age, avg(age) as avg_age from titanic_sdf group by pclass
@@ -704,7 +712,7 @@ titanic_sdf.groupBy('Pclass').agg(
     
 
 
-```
+```python
 # filter()를 적용하여 group by의 aggregation 결과 값을 기준으로 filtering 적용할 수 있음.
 titanic_sdf.groupBy('Pclass').agg(max(col('Age')).alias('max_age'), min('Age').alias('min_age') , \
                                  sum('Age').alias('sum_age'), avg('Age').alias('avg_age') \
